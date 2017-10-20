@@ -28,25 +28,31 @@ Paddle.prototype.create = function(){
     cntx.fillRect(this.x, this.y - this.height/2, this.width, this.height);
 };
 
-Paddle.prototype.move1 = function(e){
-    
+Paddle.prototype.move = function(e){
     document.onkeydown = function(e){
         console.log(e.keyCode);
         if (e.keyCode === 87){
             paddle1.y -= paddle1.speed;
-        }   else if (e.keyCode === 83) {
+        }
+        if (e.keyCode === 83) {
             paddle1.y += paddle1.speed;
+        }
+        if (e.keyCode === 38){
+            paddle2.y -= paddle2.speed;
+        }
+        if (e.keyCode === 40) {
+            paddle2.y += paddle2.speed;
         }
     };
     
     //don't let it go past canvas edge
-    if(this.y < 0){
-        this.y = 0;
-    }  else if (this.y + this.height > canvas.height){
+    if(this.y < this.height/2){
+        this.y = this.height/2;
+    }  else if (this.y + this.height/2 > canvas.height){
         this.y = canvas.height - this.height/2;
     }
 };
-    
+    /*
 Paddle.prototype.move2 = function(e){
     document.onkeydown = function(e){
         console.log(e.keyCode);
@@ -64,7 +70,7 @@ Paddle.prototype.move2 = function(e){
         this.y = canvas.height - this.height/2;
     }
 };
-
+*/
 Paddle.prototype.ballCheck1 = function(){
     if(this.x + 16 === ball.x - ball.radius && 
         this.y - this.height + ball.radius < ball.y && 
@@ -104,9 +110,11 @@ Ball.prototype.make = function(){
 Ball.prototype.checkWalls = function(){
     if(this.x - this.radius === 0){
         this.xSpeed = this.xSpeed * -1;
+        player2Score++;
     }
     if(this.x + this.radius > canvas.width) {
         this.xSpeed = this.xSpeed * -1;
+        player1Score++;
     }
     if(this.y - this.radius < 0){
         this.ySpeed = this.ySpeed * -1;
@@ -115,6 +123,15 @@ Ball.prototype.checkWalls = function(){
         this.ySpeed = this.ySpeed * -1;
     }
 };
+
+function score(){
+    var score1 = "Score: " + player1Score.toString();
+    var score2 = "Score: " + player2Score.toString();
+    cntx.fillStyle = "white";
+    cntx.font = "50px Arial";
+    cntx.fillText(score1, canvas.width/2 - 250, 50);
+    cntx.fillText(score2, canvas.width/2 + 60, 50);
+}
 
 Ball.prototype.moveBall = function(){
     this.x += this.xSpeed;
@@ -130,8 +147,8 @@ function mainProgram() {
     //formatting
     canvasFormat();
     
-    paddle1.move1();
-    paddle2.move2();
+    paddle1.move();
+    paddle2.move();
     paddle1.ballCheck1();
     paddle2.ballCheck2();
     ball.checkWalls();
@@ -143,6 +160,7 @@ function mainProgram() {
     paddle1.create();
     paddle2.create();
     
+    score();
 }
 
 setInterval(mainProgram, 5);
