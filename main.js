@@ -91,16 +91,18 @@ Ball.prototype.make = function(){
 
 Ball.prototype.checkWalls = function(){
     if(this.x - this.radius === 0){
-        //this.xSpeed = this.xSpeed * -1;
+        this.xSpeed = this.xSpeed * -1;
         player2Score++;
-        clearInterval(go);
-        setTimeout(run, 2);
+        ball.x = canvas.width/2;
+        ball.y = canvas.height/2;
     }
     if(this.x + this.radius > canvas.width) {
-        //this.xSpeed = this.xSpeed * -1;
+        this.xSpeed = this.xSpeed * -1;
         player1Score++;
-        clearInterval(go);
-        setTimeout(run, 2000);
+        ball.x = canvas.width/2;
+        ball.y = canvas.height/2;
+        
+        
     }
     if(this.y - this.radius < 0){
         this.ySpeed = this.ySpeed * -1;
@@ -149,11 +151,4 @@ function mainProgram() {
     score();
 }
 
-function run(){
-    ball.x = canvas.width/2;
-    ball.y = canvas.height/2;
-    var go = setInterval(mainProgram, 5);
-    return go;
-}
-
-run();
+var run = setInterval(mainProgram, 10);
