@@ -58,9 +58,9 @@ Paddle.prototype.move2 = function(e){
     };
 
     //don't let it go past canvas edge
-    if(this.y < 0){
-        this.y = 0;
-    }  else if (this.y + this.height > canvas.height){
+    if(this.y < this.height/2){
+        this.y = this.height/2;
+    }  else if (this.y + this.height/2 > canvas.height){
         this.y = canvas.height - this.height/2;
     }
 };
