@@ -19,7 +19,7 @@ var Paddle = function(x, y){
     this.x = x;
     this.y = y;
     this.speed = 2;
-    this.width = 15;
+    this.width = 16;
     this.height = 80;
 };
 
@@ -28,26 +28,32 @@ Paddle.prototype.create = function(){
     cntx.fillRect(this.x, this.y - this.height/2, this.width, this.height);
 };
 
-Paddle.prototype.move = function(){
-    if(this.x < canvas.width){
-        canvas.addEventListener("keydown", function(e){
-            if (e.keycode === 87){
-                this.y -= this.speed;
-            }   else if (e.keyCode === 83) {
-                this.y += this.y + this.speed;
-            }
-        });
-    }
+Paddle.prototype.move1 = function(){
     
-    if(this.x > canvas.width){
-        canvas.addEventListener("keydown", function(e){
+    document.addEventListener("onkeydown", function(e){
+        if (e.keycode === 87){
+            this.y -= this.speed;
+        }   else if (e.keyCode === 83) {
+            this.y += this.y + this.speed;
+        }
+    });
+    
+    //don't let it go past canvas edge
+    if(this.y < 0){
+        this.y = 0;
+    }  else if (this.y + this.height > canvas.height){
+        this.y = canvas.height - this.height;
+    }
+};
+    
+Paddle.prototype.move2 = function(){
+        document.addEventListener("onkeydown", function(e){
             if (e.keycode === 38){
                 this.y -= this.speed;
             }   else if (e.keyCode === 40) {
                 this.y += this.speed;
             }
         });
-    }
     
     //don't let it go past canvas edge
     if(this.y < 0){
@@ -57,8 +63,20 @@ Paddle.prototype.move = function(){
     }
 };
 
-Paddle.prototype.ballCheck = function(){
-    
+Paddle.prototype.ballCheck1 = function(){
+    if(this.x + 16 === ball.x - ball.radius && 
+        this.y - this.height + ball.radius < ball.y && 
+        this.y + this.height - ball.radius > ball.y){
+            ball.xSpeed = ball.xSpeed * -1;
+        }
+};
+
+Paddle.prototype.ballCheck2 = function(){
+    if(this.x === ball.x + ball.radius && 
+        this.y - this.height + ball.radius < ball.y && 
+        this.y + this.height - ball.radius > ball.y){
+            ball.xSpeed = ball.xSpeed * -1;
+        }
 };
 
 var paddle1 = new Paddle(40, canvas.height/2);
@@ -68,8 +86,8 @@ var paddle2 = new Paddle(canvas.width - 40, canvas.height/2);
 var Ball = function(){
     this.x = canvas.width/2;
     this.y = canvas.height/2;
-    this.xSpeed = 2;
-    this.ySpeed = 3;
+    this.xSpeed = 1;
+    this.ySpeed = 2;
     this.radius = 8;
 };
 
@@ -110,12 +128,12 @@ function mainProgram() {
     //formatting
     canvasFormat();
     
-    paddle1.move();
-    paddle2.move();
+    paddle1.move1();
+    paddle2.move2();
+    paddle1.ballCheck1();
+    paddle2.ballCheck2();
     ball.checkWalls();
     ball.moveBall();
-    //paddle1.ballCheck();
-    //paddle2.ballCheck();
     
     
     ball.make();
