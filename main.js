@@ -30,7 +30,7 @@ Paddle.prototype.create = function(){
 
 Paddle.prototype.move = function(){
     if(this.x < canvas.width){
-        canvas.addEventListener("onkeydown", function(e){
+        canvas.addEventListener("keydown", function(e){
             if (e.keycode === 87){
                 this.y -= this.speed;
             }   else if (e.keyCode === 83) {
@@ -40,7 +40,7 @@ Paddle.prototype.move = function(){
     }
     
     if(this.x > canvas.width){
-        canvas.addEventListener("onkeydown", function(e){
+        canvas.addEventListener("keydown", function(e){
             if (e.keycode === 38){
                 this.y -= this.speed;
             }   else if (e.keyCode === 40) {
@@ -64,6 +64,45 @@ Paddle.prototype.ballCheck = function(){
 var paddle1 = new Paddle(40, canvas.height/2);
 var paddle2 = new Paddle(canvas.width - 40, canvas.height/2);
 
+//ball object
+var Ball = function(){
+    this.x = canvas.width/2;
+    this.y = canvas.height/2;
+    this.xSpeed = 2;
+    this.ySpeed = 3;
+    this.radius = 8;
+};
+
+Ball.prototype.make = function(){
+    cntx.beginPath();
+    cntx.fillStyle = "white";
+    cntx.arc(this.x, this.y, this.radius, 0, 360);
+    cntx.closePath();
+    cntx.fill();
+};
+
+Ball.prototype.checkWalls = function(){
+    if(this.x - this.radius === 0){
+        this.xSpeed = this.xSpeed * -1;
+    }
+    if(this.x + this.radius > canvas.width) {
+        this.xSpeed = this.xSpeed * -1;
+    }
+    if(this.y - this.radius < 0){
+        this.ySpeed = this.ySpeed * -1;
+    }
+    if(this.y + this.radius > canvas.height){
+        this.ySpeed = this.ySpeed * -1;
+    }
+};
+
+Ball.prototype.moveBall = function(){
+    this.x += this.xSpeed;
+    this.y += this.ySpeed;
+};
+
+var ball = new Ball();
+
 function mainProgram() {
     //clear canvas
     cntx.clearRect(0, 0, canvas.width, canvas.height);
@@ -73,13 +112,17 @@ function mainProgram() {
     
     paddle1.move();
     paddle2.move();
+    ball.checkWalls();
+    ball.moveBall();
     //paddle1.ballCheck();
     //paddle2.ballCheck();
     
+    
+    ball.make();
     
     paddle1.create();
     paddle2.create();
     
 }
 
-setInterval(mainProgram, 20);
+setInterval(mainProgram, 5);
