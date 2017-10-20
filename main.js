@@ -18,7 +18,7 @@ function canvasFormat(){
 var Paddle = function(x, y){
     this.x = x;
     this.y = y;
-    this.speed = 2;
+    this.speed = 10;
     this.width = 16;
     this.height = 80;
 };
@@ -28,45 +28,47 @@ Paddle.prototype.create = function(){
     cntx.fillRect(this.x, this.y - this.height/2, this.width, this.height);
 };
 
-Paddle.prototype.move1 = function(){
+Paddle.prototype.move1 = function(e){
     
-    document.addEventListener("onkeydown", function(e){
-        if (e.keycode === 87){
-            this.y -= this.speed;
+    document.onkeydown = function(e){
+        console.log(e.keyCode);
+        if (e.keyCode === 87){
+            paddle1.y -= paddle1.speed;
         }   else if (e.keyCode === 83) {
-            this.y += this.y + this.speed;
+            paddle1.y += paddle1.speed;
         }
-    });
+    };
     
     //don't let it go past canvas edge
     if(this.y < 0){
         this.y = 0;
     }  else if (this.y + this.height > canvas.height){
-        this.y = canvas.height - this.height;
+        this.y = canvas.height - this.height/2;
     }
 };
     
-Paddle.prototype.move2 = function(){
-        document.addEventListener("onkeydown", function(e){
-            if (e.keycode === 38){
-                this.y -= this.speed;
-            }   else if (e.keyCode === 40) {
-                this.y += this.speed;
-            }
-        });
-    
+Paddle.prototype.move2 = function(e){
+    document.onkeydown = function(e){
+        console.log(e.keyCode);
+        if (e.keyCode === 38){
+            paddle2.y -= paddle2.speed;
+        }   else if (e.keyCode === 40) {
+            paddle2.y += paddle2.speed;
+        }
+    };
+
     //don't let it go past canvas edge
     if(this.y < 0){
         this.y = 0;
     }  else if (this.y + this.height > canvas.height){
-        this.y = canvas.height - this.height;
+        this.y = canvas.height - this.height/2;
     }
 };
 
 Paddle.prototype.ballCheck1 = function(){
     if(this.x + 16 === ball.x - ball.radius && 
         this.y - this.height + ball.radius < ball.y && 
-        this.y + this.height - ball.radius > ball.y){
+        this.y + this.height - 16 > ball.y){
             ball.xSpeed = ball.xSpeed * -1;
         }
 };
@@ -74,7 +76,7 @@ Paddle.prototype.ballCheck1 = function(){
 Paddle.prototype.ballCheck2 = function(){
     if(this.x === ball.x + ball.radius && 
         this.y - this.height + ball.radius < ball.y && 
-        this.y + this.height - ball.radius > ball.y){
+        this.y + this.height - 16 > ball.y){
             ball.xSpeed = ball.xSpeed * -1;
         }
 };
