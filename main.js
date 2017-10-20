@@ -52,25 +52,7 @@ Paddle.prototype.move = function(e){
         this.y = canvas.height - this.height/2;
     }
 };
-    /*
-Paddle.prototype.move2 = function(e){
-    document.onkeydown = function(e){
-        console.log(e.keyCode);
-        if (e.keyCode === 38){
-            paddle2.y -= paddle2.speed;
-        }   else if (e.keyCode === 40) {
-            paddle2.y += paddle2.speed;
-        }
-    };
 
-    //don't let it go past canvas edge
-    if(this.y < this.height/2){
-        this.y = this.height/2;
-    }  else if (this.y + this.height/2 > canvas.height){
-        this.y = canvas.height - this.height/2;
-    }
-};
-*/
 Paddle.prototype.ballCheck1 = function(){
     if(this.x + 16 === ball.x - ball.radius && 
         this.y - this.height + ball.radius < ball.y && 
@@ -109,12 +91,16 @@ Ball.prototype.make = function(){
 
 Ball.prototype.checkWalls = function(){
     if(this.x - this.radius === 0){
-        this.xSpeed = this.xSpeed * -1;
+        //this.xSpeed = this.xSpeed * -1;
         player2Score++;
+        clearInterval(go);
+        setTimeout(run, 2);
     }
     if(this.x + this.radius > canvas.width) {
-        this.xSpeed = this.xSpeed * -1;
+        //this.xSpeed = this.xSpeed * -1;
         player1Score++;
+        clearInterval(go);
+        setTimeout(run, 2000);
     }
     if(this.y - this.radius < 0){
         this.ySpeed = this.ySpeed * -1;
@@ -163,4 +149,11 @@ function mainProgram() {
     score();
 }
 
-setInterval(mainProgram, 5);
+function run(){
+    ball.x = canvas.width/2;
+    ball.y = canvas.height/2;
+    var go = setInterval(mainProgram, 5);
+    return go;
+}
+
+run();
