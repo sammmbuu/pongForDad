@@ -18,9 +18,11 @@ function canvasFormat(){
 var Paddle = function(x, y){
     this.x = x;
     this.y = y;
-    this.speed = 10;
+    this.speed = 5;
     this.width = 16;
     this.height = 80;
+    this.up = false;
+    this.down = false;
 };
 
 Paddle.prototype.create = function(){
@@ -28,23 +30,61 @@ Paddle.prototype.create = function(){
     cntx.fillRect(this.x, this.y - this.height/2, this.width, this.height);
 };
 
-Paddle.prototype.move = function(e){
-    document.onkeydown = function(e){
+document.onkeydown = function(e){
         console.log(e.keyCode);
         if (e.keyCode === 87){
-            paddle1.y -= paddle1.speed;
+            paddle1.up = true;
         }
         if (e.keyCode === 83) {
-            paddle1.y += paddle1.speed;
+            paddle1.down = true;
         }
         if (e.keyCode === 38){
-            paddle2.y -= paddle2.speed;
+            paddle2.up = true;
         }
         if (e.keyCode === 40) {
-            paddle2.y += paddle2.speed;
+            paddle2.down = true;
         }
     };
+document.onkeyup = function(e){
+        console.log(e.keyCode);
+        if (e.keyCode === 87){
+            paddle1.up = false;
+        }
+        if (e.keyCode === 83) {
+            paddle1.down = false;
+        }
+        if (e.keyCode === 38){
+            paddle2.up = false;
+        }
+        if (e.keyCode === 40) {
+            paddle2.down = false;
+        }
+    };
+Paddle.prototype.move = function(e){
+    var temp = this;
+    /*document.onkeydown = function(e){
+        console.log(e.keyCode);
+        if (e.keyCode === 87){
+            paddle1.up = true;
+        }
+        if (e.keyCode === 83) {
+            paddle1.down = true;
+        }
+        if (e.keyCode === 38){
+            paddle2.up = true;
+        }
+        if (e.keyCode === 40) {
+            paddle2.down = true;
+        }
+    };
+    */
     
+    if (this.up){
+        this.y -= this.speed;
+    }
+    if (this.down){
+        this.y += this.speed;
+    }
     //don't let it go past canvas edge
     if(this.y < this.height/2){
         this.y = this.height/2;
